@@ -1,0 +1,36 @@
+version: '3.1'
+
+services:
+
+  postgres:
+    build: postgres/
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: root
+    networks: 
+      - connect
+      
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 7070:8080   
+      
+  app:
+    working_dir: /app
+    build: app/
+    links:
+      - "postgres:postgres"
+    ports:
+      - 8880:8080
+    networks: 
+      - connect
+    depends_on: 
+      - postgres
+        
+networks:
+  connect:
+    driver: bridge
+
+
+    
